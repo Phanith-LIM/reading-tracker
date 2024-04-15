@@ -8,12 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.app.readingtracker.R
-import com.app.readingtracker.ui.theme.kBgPrimary
+
 
 @Composable
 fun SplashScreenView() {
     Scaffold (
-        containerColor = kBgPrimary,
+        containerColor = MaterialTheme.colorScheme.background,
         content = { it ->
             Box(
                 modifier = Modifier.fillMaxSize().padding(it),
