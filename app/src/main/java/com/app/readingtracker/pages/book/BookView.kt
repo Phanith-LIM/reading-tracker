@@ -1,4 +1,4 @@
-package com.app.readingtracker.pages.home
+package com.app.readingtracker.pages.book
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -9,14 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomeView() {
+fun BookView () {
     return Scaffold (
         content = {
             Box(
                 modifier = Modifier.padding(it),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "HomeView")
+                Text(text = "BookView")
             }
         }
     )

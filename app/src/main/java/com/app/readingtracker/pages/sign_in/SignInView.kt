@@ -14,15 +14,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.ExperimentalSafeArgsApi
 import com.app.readingtracker.R
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSecondary
 import com.app.readingtracker.ui.theme.kSpace
 
+@OptIn(ExperimentalSafeArgsApi::class)
 @Composable
 fun SignInView() {
-    Scaffold(
+    return Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.background,
         content = { paddingValues ->
@@ -85,7 +87,6 @@ fun SignInView() {
                         )
                     },
                     onClick = {
-
                     }
                 )
                 Spacer(modifier = Modifier.height(kSpace))
