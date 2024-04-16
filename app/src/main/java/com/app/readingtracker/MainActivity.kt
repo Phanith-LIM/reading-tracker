@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.app.readingtracker.pages.sign_in.SignInView
+import com.app.readingtracker.pages.sign_in.SignInNavigationHost
 import com.app.readingtracker.ui.theme.ReadingtrackerTheme
 
 
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ReadingtrackerTheme {
-                SignInView()
+                SignInNavigationHost()
             }
         }
     }

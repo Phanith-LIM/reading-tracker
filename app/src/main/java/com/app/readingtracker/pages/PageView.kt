@@ -53,8 +53,7 @@ fun PageView() {
     var selectedIndex by remember {
         mutableIntStateOf(0)
     }
-
-    return Scaffold (
+    Scaffold (
         contentColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             NavigationBar (
@@ -114,7 +113,7 @@ fun PageView() {
         Box (
             modifier = Modifier.padding(paddingValues)
         ) {
-            NavigationHost()
+            NavigationHost(navController)
         }
     }
 }

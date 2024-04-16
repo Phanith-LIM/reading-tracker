@@ -7,16 +7,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.app.readingtracker.pages.PageRoute.*
 import com.app.readingtracker.pages.book.BookView
 import com.app.readingtracker.pages.home.HomeView
 
+
 @Composable
-fun NavigationHost() {
-    val navController = rememberNavController()
+fun NavigationHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = HomeView.route) {
         composable(route = HomeView.route) {
             HomeView()

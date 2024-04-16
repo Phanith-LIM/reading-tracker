@@ -14,16 +14,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.ExperimentalSafeArgsApi
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import com.app.readingtracker.R
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSecondary
 import com.app.readingtracker.ui.theme.kSpace
 
-@OptIn(ExperimentalSafeArgsApi::class)
 @Composable
-fun SignInView() {
+fun SignInView(navHostController: NavHostController) {
     return Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.background,
@@ -87,6 +87,13 @@ fun SignInView() {
                         )
                     },
                     onClick = {
+                        navHostController.navigate(SignInRoute.PageView.route) {
+                            popUpTo(navHostController.graph.findStartDestination().id) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = false
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.height(kSpace))
