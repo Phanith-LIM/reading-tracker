@@ -10,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.readingtracker.ui.theme.kSecondary
 
@@ -59,8 +58,8 @@ fun PageView() {
             NavigationBar (
                 containerColor = MaterialTheme.colorScheme.background,
             ) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDirection = navBackStackEntry?.destination
+//                val navBackStackEntry by navController.currentBackStackEntryAsState()
+//                val currentDirection = navBackStackEntry?.destination
                 itemList.forEachIndexed { index, item ->
                     NavigationBarItem(
                         alwaysShowLabel = false,

@@ -13,13 +13,14 @@ import androidx.navigation.compose.composable
 import com.app.readingtracker.pages.PageRoute.*
 import com.app.readingtracker.pages.book.BookView
 import com.app.readingtracker.pages.home.HomeView
+import com.app.readingtracker.pages.home.HomeViewModel
 
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
     NavHost(navController = navController, startDestination = HomeView.route) {
         composable(route = HomeView.route) {
-            HomeView()
+            HomeView(homeViewModel = HomeViewModel())
         }
         composable(route = BookView.route) {
            BookView()
