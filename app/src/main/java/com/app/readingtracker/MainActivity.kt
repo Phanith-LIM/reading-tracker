@@ -5,9 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.app.readingtracker.pages.sign_in.SignInNavigationHost
+import cafe.adriel.voyager.navigator.Navigator
+import com.app.readingtracker.pages.PageView
 import com.app.readingtracker.ui.theme.ReadingtrackerTheme
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ReadingtrackerTheme {
-                SignInNavigationHost()
+                Navigator(
+                    screen = PageView(),
+                )
             }
         }
     }
