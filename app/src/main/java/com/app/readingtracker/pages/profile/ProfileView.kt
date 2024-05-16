@@ -1,25 +1,17 @@
 package com.app.readingtracker.pages.profile
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.FilterQuality
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import coil.compose.SubcomposeAsyncImage
 import com.app.readingtracker.ui.theme.kPadding
-import com.app.readingtracker.ui.theme.kPrimary
 
 class ProfileView: Screen {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -32,9 +24,7 @@ class ProfileView: Screen {
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.background,
                     ),
-                    title = {
-                        Text("Profile")
-                    },
+                    title = { Text("Profile") },
                     actions = {
                         IconButton(
                             colors = IconButtonDefaults.filledIconButtonColors(
@@ -42,81 +32,65 @@ class ProfileView: Screen {
                             ),
                             onClick = {
 
-                            }
-                        ) {
-                            Icon(Icons.Default.Settings, contentDescription = null)
-                        }
+                            },
+                            content = { Icon(Icons.Default.Settings, contentDescription = null) }
+                        )
                     }
                 )
             },
             content = {
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(it),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(it),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CircleAvatar(name = "Phanith LIM", imageUrl = "https://somoskudasai.com/wp-content/uploads/2022/09/portada_lycoris-recoil-24.jpg")
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                    content = {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        CircleAvatar(name = "Phanith LIM", imageUrl = "https://somoskudasai.com/wp-content/uploads/2022/09/portada_lycoris-recoil-24.jpg")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        UserDataReadingComposable()
+                    }
+                )
             }
         )
     }
-
 }
 
+@Preview(showBackground = true)
 @Composable
-fun CircleAvatar(name: String, imageUrl: String? = null) {
-    if(imageUrl != null) {
-        return Column (horizontalAlignment = Alignment.CenterHorizontally,) {
-            Box(
+fun UserDataReadingComposable() {
+    Row(
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.1f).padding(horizontal = kPadding),
+        verticalAlignment = Alignment.CenterVertically,
+        content = {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {
+                    Text(
+                        text = "104",
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Text(text = "Books", style = MaterialTheme.typography.titleLarge)
+                }
+            )
+            Divider(
                 modifier = Modifier
-                    .size(96.dp)
-                    .clip(CircleShape)
-                    .background(kPrimary.copy(alpha = 0.3f))
-                    .aspectRatio(1f)
-            ) {
-                SubcomposeAsyncImage(
-                    model = imageUrl,
-                    loading = {
-                        CircularProgressIndicator()
-                    },
-                    filterQuality = FilterQuality.Low,
-                    clipToBounds = true,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentDescription = null
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = name,
-                style = MaterialTheme.typography.titleLarge,
-                color = kPrimary,
-                textAlign = TextAlign.Center,
+                    .fillMaxHeight()
+                    .width(1.dp),
+                color = Color.Gray
+            )
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                content = {
+                    Text(
+                        text = "104",
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                    )
+                    Text(text = "Read", style = MaterialTheme.typography.titleLarge)
+                }
             )
         }
-   }
-   return Column (horizontalAlignment = Alignment.CenterHorizontally,){
-       Box(
-           modifier = Modifier
-               .size(96.dp)
-               .clip(CircleShape)
-               .background(kPrimary.copy(alpha = 0.3f))
-               .aspectRatio(1f)
-       ) {
-           Icon(
-               Icons.Default.Person,
-               contentDescription = null,
-               tint = kPrimary,
-               modifier = Modifier.align(Alignment.Center).padding(kPadding / 4).size(48.dp),
-           )
-       }
-       Spacer(modifier = Modifier.height(8.dp))
-       Text(
-           text = name,
-           style = MaterialTheme.typography.titleLarge,
-           color = kPrimary,
-           textAlign = TextAlign.Center,
-       )
-   }
+    )
 }

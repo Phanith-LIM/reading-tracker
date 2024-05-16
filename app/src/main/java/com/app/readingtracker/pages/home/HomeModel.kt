@@ -1,13 +1,14 @@
 package com.app.readingtracker.pages.home
-import androidx.compose.ui.graphics.vector.ImageVector
 import kotlinx.serialization.Serializable
 
 
-data class HomeModel(
-    val id: String,
-    val name: String,
-    val icon: ImageVector
-)
+enum class GetAllEnum {
+    TREADING,
+    LATEST,
+    READ,
+    CURRENT,
+    WANT,
+}
 
 @Serializable
 data class BookModel(

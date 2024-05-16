@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -109,7 +108,7 @@ fun IconByName(name: String) {
 
 @Composable
 fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
-    return   LazyRow {
+    return LazyRow {
         items(list ?: emptyList()) { book ->
             BookCard(
                 bookName = book.title,
@@ -125,7 +124,7 @@ fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
 
 @Composable
 fun ListGenerateLatestBook(list: List<LatestBookModel> ?) {
-    return   LazyRow {
+    return LazyRow {
         items(list ?: emptyList()) { book ->
             BookCard(
                 bookName = book.title,

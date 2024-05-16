@@ -16,7 +16,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.app.readingtracker.pages.book.BookView
 import com.app.readingtracker.pages.chart.ChartView
 import com.app.readingtracker.pages.home.HomeView
-import com.app.readingtracker.pages.home.HomeViewModel
 import com.app.readingtracker.pages.profile.ProfileView
 import com.app.readingtracker.ui.theme.kSecondary
 
@@ -61,7 +60,7 @@ class PageView: Screen {
                 Box(modifier = Modifier.fillMaxSize().padding(it)) {
                     when (viewModel.selectedIndex.collectAsState().value) {
                         0 -> Navigator(HomeView(navigator = navigator))
-                        1 -> Navigator(BookView())
+                        1 -> Navigator(BookView(navigator = navigator))
                         2 -> Navigator(ChartView())
                         3 -> Navigator(ProfileView())
                     }

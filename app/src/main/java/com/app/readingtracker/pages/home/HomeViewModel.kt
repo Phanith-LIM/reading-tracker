@@ -1,11 +1,7 @@
 package com.app.readingtracker.pages.home
 
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.json.responseJson
@@ -16,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
 
 
-class HomeViewModel(private val handle: SavedStateHandle): ViewModel() {
+class HomeViewModel: ViewModel() {
     private val _listCategory: MutableStateFlow<List<CategoryModel>> = MutableStateFlow(listOf())
     val listCategory: StateFlow<List<CategoryModel>> = _listCategory.asStateFlow()
 
