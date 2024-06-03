@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android") version "2.44" apply false
     id("kotlinx-serialization")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -87,4 +87,13 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("io.insert-koin:koin-androidx-compose:3.0.1")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation("com.auth0.android:jwtdecode:2.0.2")
+    implementation("androidx.datastore:datastore-preferences-core:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
 }

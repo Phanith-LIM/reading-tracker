@@ -1,85 +1,56 @@
 package com.app.readingtracker.pages.home
 
+import com.app.readingtracker.core.BaseRepository
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.json.responseJson
-import com.github.kittinunf.result.Result
+import androidx.lifecycle.viewModelScope
+import com.app.readingtracker.core.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
+class HomeViewModel : ViewModel() {
+    private val baseRepository = BaseRepository()
+    private val _uiState = MutableStateFlow(UiState.LOADING)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-class HomeViewModel: ViewModel() {
-    private val _listCategory: MutableStateFlow<List<CategoryModel>> = MutableStateFlow(listOf())
-    val listCategory: StateFlow<List<CategoryModel>> = _listCategory.asStateFlow()
+    private val _categories = MutableStateFlow<List<CategoryModel>>(emptyList())
+    val categories: StateFlow<List<CategoryModel>> = _categories.asStateFlow()
 
-    private val _listTreading: MutableStateFlow<List<BookModel>> = MutableStateFlow(listOf())
-    val listTreading: StateFlow<List<BookModel>> = _listTreading.asStateFlow()
+    private val _treading = MutableStateFlow<List<BookModel>>(emptyList())
+    val treading: StateFlow<List<BookModel>> = _treading.asStateFlow()
 
-    private val _listLatest: MutableStateFlow<List<LatestBookModel>> = MutableStateFlow(listOf())
-    val listLatest: StateFlow<List<LatestBookModel>> = _listLatest.asStateFlow()
+    private val _latest = MutableStateFlow<List<LatestBookModel>>(emptyList())
+    val latest: StateFlow<List<LatestBookModel>> = _latest.asStateFlow()
 
-    val isLoading = mutableStateOf(true)
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
     init {
-        getCategory()
-        getTreading()
-        getLatest()
+        fetchData()
     }
 
-    private fun getCategory() {
-        val url = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/category"
-        val header: HashMap<String, String> = hashMapOf()
-        Fuel.get(url).header(header).responseJson { _, _, result ->
-            when (result) {
-                is Result.Failure -> {
-                    Log.d("HomeViewModel", "getCategory: ${result.getException()}")
-                }
-                is Result.Success -> {
-                    val data = result.get().content
-                    val categorys = Json.decodeFromString<List<CategoryModel>>(data)
-                    _listCategory.value = categorys
-                    isLoading.value = false
-                }
+    private fun fetchData() {
+        viewModelScope.launch {
+            _uiState.value = UiState.LOADING
+            try {
+                val categoryData = baseRepository.get("categories")
+                val treadingData = baseRepository.get("books/type/treading")
+                val latestData = baseRepository.get("books/type/latest")
+
+                _categories.value = Json.decodeFromString(categoryData)
+                _treading.value = Json.decodeFromString(treadingData)
+                _latest.value = Json.decodeFromString(latestData)
+
+                _uiState.value = UiState.SUCCESS
+            } catch (e: Exception) {
+                _uiState.value = UiState.ERROR
+                _errorMessage.value = e.message ?: ""
+                Log.d("Error API", e.message ?: "")
             }
         }
     }
 
-    private fun getTreading() {
-        val url = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/book/type/get_treading"
-        val header: HashMap<String, String> = hashMapOf()
-        Fuel.get(url).header(header).responseJson { _, _, result ->
-            when (result) {
-                is Result.Failure -> {
-                    Log.d("HomeViewModel", "getCategory: ${result.getException()}")
-                }
-                is Result.Success -> {
-                    val data = result.get().content
-                    println(data)
-                    val books = Json.decodeFromString<List<BookModel>>(data)
-                    _listTreading.value = books
-                }
-            }
-        }
-    }
-
-    private fun getLatest() {
-        val url = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/book/type/get_latest"
-        val header: HashMap<String, String> = hashMapOf()
-        Fuel.get(url).header(header).responseJson { _, _, result ->
-            when (result) {
-                is Result.Failure -> {
-                    Log.d("HomeViewModel", "getCategory: ${result.getException()}")
-                }
-                is Result.Success -> {
-                    val data = result.get().content
-                    val books = Json.decodeFromString<List<LatestBookModel>>(data)
-                    _listLatest.value = books
-                }
-            }
-        }
-    }
 }

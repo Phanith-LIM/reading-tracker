@@ -6,7 +6,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import cafe.adriel.voyager.navigator.Navigator
-import com.app.readingtracker.pages.PageView
+import com.app.readingtracker.pages.splashscreen.SplashScreen
 import com.app.readingtracker.ui.theme.ReadingtrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -18,11 +18,10 @@ class MainActivity : ComponentActivity() {
             )
         )
         super.onCreate(savedInstanceState)
+        this.applicationContext
         setContent {
             ReadingtrackerTheme {
-                Navigator(
-                    screen = PageView(),
-                )
+                Navigator( screen = SplashScreen())
             }
         }
     }

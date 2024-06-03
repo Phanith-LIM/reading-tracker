@@ -44,15 +44,14 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-                    title = {
-                        DynamicText(value = typeGet)
-                    },
+                    title = { DynamicText(value = typeGet) },
                     navigationIcon = {
                         IconButton(
-                            onClick = { navigator.pop() }
-                        ) {
-                            Icon(Icons.Default.ArrowBackIosNew, contentDescription = null)
-                        }
+                            onClick = { navigator.pop() },
+                            content = {
+                                Icon(Icons.Default.ArrowBackIosNew, contentDescription = null)
+                            }
+                        )
                     }
                 )
             },
@@ -67,9 +66,7 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
                 } else {
                     if (viewModel.listBooks.value.isEmpty()) {
                         Box(
-                            modifier = Modifier
-                                .padding(it)
-                                .fillMaxSize(),
+                            modifier = Modifier.padding(it).fillMaxSize(),
                             contentAlignment = Alignment.Center,
                             content = {
                                 Text(text = "No records", textAlign = TextAlign.Center)

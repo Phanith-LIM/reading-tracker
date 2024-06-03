@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1006818222317",
+    "project_id": "reading-tracker-666ba",
+    "storage_bucket": "reading-tracker-666ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006818222317:android:21daf6b3d7e2cd5aaface4",
+        "android_client_info": {
+          "package_name": "com.app.readingtracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006818222317-6mckcahdo8duuqqmptsgc55saespbub8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.readingtracker",
+            "certificate_hash": "f0a7efe86707a8e667a0fa6d1473e868d43de803"
+          }
+        },
+        {
+          "client_id": "1006818222317-dafh2fsilibolbm1dmmmbulesjgntjgi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_Uq7OXZS1iAY-h8-D7ygsmDUOC3H-yMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006818222317-dafh2fsilibolbm1dmmmbulesjgntjgi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

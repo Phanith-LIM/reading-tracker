@@ -30,7 +30,7 @@ class BookDetailViewModel(private val id: String) : ViewModel() {
     }
 
     private fun getBookDetail() {
-        val url = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/book/$id"
+        val url = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/books/$id"
         val header: HashMap<String, String> = hashMapOf()
         Fuel.get(url).header(header).responseJson { _, _, result ->
             when (result) {

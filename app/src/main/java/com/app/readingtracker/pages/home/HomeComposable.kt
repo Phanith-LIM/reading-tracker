@@ -114,7 +114,7 @@ fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
                 bookName = book.title,
                 bookImage = book.thumbnail ?: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png",
                 onClick = {
-                    navigator?.push(BookDetailView(book._id))
+                    navigator?.push(BookDetailView(book.id))
                 }
             )
         }
@@ -123,14 +123,14 @@ fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
 
 
 @Composable
-fun ListGenerateLatestBook(list: List<LatestBookModel> ?) {
+fun ListGenerateLatestBook(list: List<LatestBookModel> ?,  navigator: Navigator?) {
     return LazyRow {
         items(list ?: emptyList()) { book ->
             BookCard(
                 bookName = book.title,
                 bookImage = book.thumbnail ?: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png",
                 onClick = {
-
+                    navigator?.push(BookDetailView(book.id))
                 }
             )
         }
