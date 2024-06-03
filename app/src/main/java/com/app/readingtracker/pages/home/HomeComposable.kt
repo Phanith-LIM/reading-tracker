@@ -22,6 +22,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import com.app.readingtracker.pages.home.book_detail.BookDetailView
+import com.app.readingtracker.pages.home.get_all_by_category.GetAllByCategoryModel
+import com.app.readingtracker.pages.home.get_all_by_category.GetAllByCategoryView
 import com.app.readingtracker.share.composable.BookCard
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSpace
@@ -29,41 +31,39 @@ import com.app.readingtracker.ui.theme.kSpace
 @Composable
 fun HeaderTile(label: String, subLabel: String? = null, onClick: () -> Unit) {
     if(subLabel != null) {
-        return Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(label, style = MaterialTheme.typography.titleLarge)
-                Text(
-                    "view all",
-                    modifier = Modifier.clickable { onClick() },
-                    color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
+        return Column (
+            content = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    content = {
+                        Text(label, style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            "view all",
+                            modifier = Modifier.clickable { onClick() },
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
                 )
+                Spacer(modifier = Modifier.height(kSpace / 2))
+                Text(subLabel, style = MaterialTheme.typography.labelLarge, color = Color.Gray)
             }
-            Spacer(modifier = Modifier.height(kSpace / 2))
-            Text(subLabel, style = MaterialTheme.typography.labelLarge, color = Color.Gray)
-        }
+        )
     }
     return Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(label, style = MaterialTheme.typography.titleLarge)
-        Text(
-            "view all",
-            modifier = Modifier.clickable { onClick() },
-            color = MaterialTheme.colorScheme.primary,
-            textDecoration = TextDecoration.Underline
-        )
-    }
+        content = {
+            Text(label, style = MaterialTheme.typography.titleLarge)
+        }
+    )
 }
 
 
 @Composable
-fun ListGenerator(list: List<CategoryModel> ?) {
-    return LazyRow {
+fun ListGenerator(list: List<CategoryModel>?, navigator: Navigator?) {
+    LazyRow {
         items(list ?: emptyList()) { category ->
             AssistChip(
                 modifier = Modifier.height(40.dp).padding(end = 8.dp),
@@ -76,13 +76,13 @@ fun ListGenerator(list: List<CategoryModel> ?) {
                             .background(kPrimary),
                         contentAlignment = Alignment.Center
                     ) {
-                       IconByName(category.icon)
+                        IconByName(category.icon)
                     }
                 },
                 shape = MaterialTheme.shapes.large,
                 enabled = true,
                 onClick = {
-
+                    navigator?.push(GetAllByCategoryView(category.id, category.name))
                 }
             )
         }

@@ -10,9 +10,8 @@ class PageViewModel : ViewModel() {
 
     fun setSelectedIndex(index: Int) {
         if(index == _selectedIndex.value) {
-            return;
+            return
         }
-           _selectedIndex.value = index;
-
+        _selectedIndex.value = index;
     }
 }

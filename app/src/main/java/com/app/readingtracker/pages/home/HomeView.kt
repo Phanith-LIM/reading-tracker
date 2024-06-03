@@ -1,7 +1,6 @@
 package com.app.readingtracker.pages.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,7 +21,6 @@ import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.get_all.GetAllView
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kSpace
-import kotlinx.coroutines.flow.firstOrNull
 
 class HomeView(val navigator: Navigator?) : Screen {
     @SuppressLint("StateFlowValueCalledInComposition")
@@ -42,7 +40,6 @@ class HomeView(val navigator: Navigator?) : Screen {
 
         LaunchedEffect(Unit) {
             val data = DataStoreManager.read(context, "value")
-            Log.d("Storage", data.firstOrNull().toString())
         }
 
         return Scaffold(
@@ -108,9 +105,9 @@ class HomeView(val navigator: Navigator?) : Screen {
                                 // Categories
                                 HeaderTile(label = "Categories") {}
                                 Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerator(categories.subList(0, categories.size / 2))
+                                ListGenerator(categories.subList(0, categories.size / 2), navigator)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerator(categories.subList(categories.size / 2, categories.size))
+                                ListGenerator(categories.subList(categories.size / 2, categories.size), navigator)
                                 Spacer(modifier = Modifier.height(kSpace * 3))
 
                                 // Treading

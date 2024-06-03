@@ -6,7 +6,7 @@ enum class GetAllEnum(val displayName: String) {
     TREADING("treading-list"),
     LATEST("latest-list"),
     READ("READ"),
-    CURRENT("CURREN"),
+    CURRENT("CURRENT"),
     WANT("WANT"),
 }
 

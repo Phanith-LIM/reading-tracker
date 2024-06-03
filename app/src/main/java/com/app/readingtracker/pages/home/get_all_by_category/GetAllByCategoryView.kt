@@ -1,4 +1,4 @@
-package com.app.readingtracker.pages.home.get_all
+package com.app.readingtracker.pages.home.get_all_by_category
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -21,24 +21,24 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.pages.home.GetAllEnum
+import com.app.readingtracker.pages.home.get_all.GenerateListData
 import kotlinx.coroutines.flow.firstOrNull
 
-data class GetAllView(val typeGet: GetAllEnum): Screen {
+data class GetAllByCategoryView(val id: String, val name: String): Screen {
     @SuppressLint("StateFlowValueCalledInComposition")
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = viewModel<GetAllViewModel>(factory = GetAllViewModelFactory(typeGet))
+        val viewModel = viewModel<GetAllByCategoryModel>(factory = GetAllByCategoryViewModelFactory(id))
         val uiState by viewModel.uiState.collectAsState()
-        val listData by viewModel.listBooks.collectAsState()
+        val listBook by viewModel.listBooks.collectAsState()
         val context = LocalContext.current
 
         LaunchedEffect(Unit) {
             val token = DataStoreManager.read(context,"refresh").firstOrNull()
             if(token != null) {
-                viewModel.getAllBooks(token)
+                viewModel.getAllBooksByCategory(token)
             }
         }
 
@@ -47,7 +47,7 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
             topBar = {
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
-                    title = { DynamicText(value = typeGet) },
+                    title = { Text(text = name) },
                     navigationIcon = {
                         IconButton(
                             onClick = { navigator.pop() },
@@ -76,11 +76,11 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
                                 .padding(it)
                                 .padding(horizontal = 8.dp),
                             contentAlignment = Alignment.Center,
-                            content = { Text("An error occurred. Please try again.") }
+                            content = { Text("An error occurred. Please try again. ${viewModel.errorMessage}") }
                         )
                     }
                     UiState.SUCCESS -> {
-                        GenerateListData(listData = listData, it = it)
+                        GenerateListData(listData = listBook, it = it)
                     }
                 }
             }
