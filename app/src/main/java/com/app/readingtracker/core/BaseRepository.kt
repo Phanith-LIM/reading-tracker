@@ -6,11 +6,10 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
 import kotlinx.coroutines.suspendCancellableCoroutine
-import okhttp3.internal.http2.Header
 import kotlin.coroutines.resume
 
 open class BaseRepository {
-    private val baseUrl = "https://reading-tracking-api-99b58363a3cb.herokuapp.com/"
+    private val baseUrl = "https://reading-tracker-api-om3dbxgmuq-as.a.run.app/"
     private var _header: Map<String, String> = hashMapOf()
 
     fun setHeader(token: String) {

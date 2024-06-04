@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.readingtracker.core.UiState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,8 +30,17 @@ class HomeViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
+    private val _searchResult = MutableStateFlow<List<SearchModel>>(emptyList())
+    var searchResult: StateFlow<List<SearchModel>> = _searchResult.asStateFlow()
+
+    private var searchJob: Job? = null
+
     init {
         fetchData()
+    }
+
+    fun resetListResult() {
+        _searchResult.value = emptyList()
     }
 
     private fun fetchData() {
@@ -47,6 +58,21 @@ class HomeViewModel : ViewModel() {
                 _uiState.value = UiState.SUCCESS
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
+                _errorMessage.value = e.message ?: ""
+                Log.d("Error API", e.message ?: "")
+            }
+        }
+    }
+
+    fun onSearch(query: String) {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(600)
+            try {
+                val response = baseRepository.get("books/search?keyword=$query")
+                _searchResult.value = Json.decodeFromString(response)
+                Log.d("Result", _searchResult.value.toString())
+            } catch (e: Exception) {
                 _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }

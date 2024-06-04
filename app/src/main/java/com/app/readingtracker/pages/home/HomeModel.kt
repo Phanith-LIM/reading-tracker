@@ -32,3 +32,10 @@ data class CategoryModel(
     val name: String,
     val icon: String,
 )
+
+@Serializable
+data class SearchModel(
+    @SerialName("_id") val id: String,
+    val title: String,
+    val thumbnail: String?,
+)

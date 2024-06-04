@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.app.readingtracker.core.BaseRepository
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.pages.home.GetAllEnum
 import com.app.readingtracker.pages.home.get_all.TreadingBookModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +30,7 @@ class GetAllByCategoryModel(private val id: String): ViewModel() {
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
-    fun getAllBooksByCategory(token: String) {
+    fun getAllBooksByCategory() {
         viewModelScope.launch {
             _uiState.value = UiState.LOADING
             try {

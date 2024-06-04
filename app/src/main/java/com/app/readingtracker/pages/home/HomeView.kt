@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.get_all.GetAllView
 import com.app.readingtracker.ui.theme.kPadding
@@ -37,42 +36,10 @@ class HomeView(val navigator: Navigator?) : Screen {
         val treading by viewModel.treading.collectAsState()
         val latest by viewModel.latest.collectAsState()
         val error by viewModel.errorMessage.collectAsState()
-
-        LaunchedEffect(Unit) {
-            val data = DataStoreManager.read(context, "value")
-        }
+        val listResult by viewModel.searchResult.collectAsState()
 
         return Scaffold(
             contentWindowInsets = WindowInsets(0.dp),
-            topBar = {
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    SearchBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = if (active) 0.dp else kPadding),
-                        query = text,
-                        onQueryChange = { text = it },
-                        onSearch = {},
-                        active = active,
-                        onActiveChange = {
-                            active = it
-                        },
-                        placeholder = { Text("Title, author or ISBN") },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                        trailingIcon = {
-                            IconButton(onClick = { active = !active }) {
-                                Icon(
-                                    if (!active) Icons.Default.MoreVert else Icons.Default.Close,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        content = {
-
-                        }
-                    )
-                }
-            },
             content = { it ->
                 when (uiState){
                     UiState.LOADING -> {
@@ -95,44 +62,96 @@ class HomeView(val navigator: Navigator?) : Screen {
                         )
                     }
                     UiState.SUCCESS -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(kPadding * 2)
-                                .verticalScroll(rememberScrollState()),
+                        Column (
                             content = {
-                                // Categories
-                                HeaderTile(label = "Categories") {}
-                                Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerator(categories.subList(0, categories.size / 2), navigator)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerator(categories.subList(categories.size / 2, categories.size), navigator)
-                                Spacer(modifier = Modifier.height(kSpace * 3))
-
-                                // Treading
-                                HeaderTile(
-                                    label = "Treading",
-                                    subLabel = "What's popular now",
-                                    onClick = {
-                                        navigator?.push(GetAllView(GetAllEnum.TREADING))
+                                SearchBar(
+                                    modifier = Modifier.fillMaxWidth()
+                                        .padding(it)
+                                        .padding(horizontal = if (active) 0.dp else kPadding),
+                                    query = text,
+                                    onQueryChange = {
+                                        text = it
+                                        viewModel.onSearch(text)
+                                    },
+                                    onSearch = {
+                                        viewModel.onSearch(text)
+                                    },
+                                    active = active,
+                                    onActiveChange = {
+                                        active = !active
+                                        if(!active) {
+                                            text = ""
+                                            viewModel.resetListResult()
+                                        }
+                                    },
+                                    shape = SearchBarDefaults.dockedShape,
+                                    placeholder = { Text("Title, author or ISBN") },
+                                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                                    trailingIcon = {
+                                        IconButton(
+                                            onClick = {
+                                                active = !active
+                                                if(!active) {
+                                                    text = ""
+                                                    viewModel.resetListResult()
+                                                }
+                                            },
+                                            content = {
+                                                Icon(
+                                                    if (!active) Icons.Default.MoreVert else Icons.Default.Close,
+                                                    contentDescription = null
+                                                )
+                                            }
+                                        )
+                                    },
+                                    content = {
+                                        ListSearch(list = listResult, navigator = navigator)
                                     }
                                 )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerateBook(treading, navigator = navigator)
-                                Spacer(modifier = Modifier.height(kSpace * 3))
+                                if(!active) {
+                                    Column(modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(it)
+                                        .padding(kPadding * 2)
+                                        .verticalScroll(rememberScrollState()),
+                                        content = {
+                                            // Categories
+                                            HeaderTile(label = "Categories") {}
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            ListGenerator(categories.subList(0, categories.size / 2), navigator)
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            ListGenerator(
+                                                categories.subList(categories.size / 2, categories.size),
+                                                navigator
+                                            )
+                                            Spacer(modifier = Modifier.height(kSpace * 3))
 
-                                // Latest
-                                HeaderTile(
-                                    label = "Latest",
-                                    subLabel = "Titles recently added on",
-                                    onClick = {
-                                        navigator?.push(GetAllView(GetAllEnum.LATEST))
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                ListGenerateLatestBook(latest, navigator = navigator)
-                                Spacer(modifier = Modifier.height(kSpace * 3))
+                                            // Treading
+                                            HeaderTile(
+                                                label = "Treading",
+                                                subLabel = "What's popular now",
+                                                onClick = {
+                                                    navigator?.push(GetAllView(GetAllEnum.TREADING))
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            ListGenerateBook(treading, navigator = navigator)
+                                            Spacer(modifier = Modifier.height(kSpace * 3))
+
+                                            // Latest
+                                            HeaderTile(
+                                                label = "Latest",
+                                                subLabel = "Titles recently added on",
+                                                onClick = {
+                                                    navigator?.push(GetAllView(GetAllEnum.LATEST))
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                            ListGenerateLatestBook(latest, navigator = navigator)
+                                            Spacer(modifier = Modifier.height(kSpace * 3))
+                                        }
+                                    )
+                                }
                             }
                         )
                     }

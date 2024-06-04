@@ -13,16 +13,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.get_all.GenerateListData
-import kotlinx.coroutines.flow.firstOrNull
 
 data class GetAllByCategoryView(val id: String, val name: String): Screen {
     @SuppressLint("StateFlowValueCalledInComposition")
@@ -33,13 +30,9 @@ data class GetAllByCategoryView(val id: String, val name: String): Screen {
         val viewModel = viewModel<GetAllByCategoryModel>(factory = GetAllByCategoryViewModelFactory(id))
         val uiState by viewModel.uiState.collectAsState()
         val listBook by viewModel.listBooks.collectAsState()
-        val context = LocalContext.current
 
         LaunchedEffect(Unit) {
-            val token = DataStoreManager.read(context,"refresh").firstOrNull()
-            if(token != null) {
-                viewModel.getAllBooksByCategory(token)
-            }
+            viewModel.getAllBooksByCategory()
         }
 
         return Scaffold(

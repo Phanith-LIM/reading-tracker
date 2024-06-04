@@ -26,37 +26,38 @@ fun BookCard(bookName: String, bookImage: String, onClick: () -> Unit) {
             contentColor = MaterialTheme.colorScheme.onSurface,
             containerColor = MaterialTheme.colorScheme.background,
         ),
-    ) {
-        Column(modifier = Modifier.padding(kPadding)) {
-            Box(
-                modifier = Modifier.clip(MaterialTheme.shapes.medium).weight(1f),
-                contentAlignment = Alignment.Center,
-                content = {
-                    SubcomposeAsyncImage(
-                        model = bookImage,
-                        loading = {
-                            Box(
-                                modifier = Modifier.width(32.dp).height(32.dp).align(Alignment.Center),
-                                content = {
-                                    CircularProgressIndicator()
-                                }
-                            )
-                        },
-                        filterQuality = FilterQuality.Low,
-                        clipToBounds = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        contentDescription = null
-                    )
-                }
-            )
-            Text(
-                text = bookName,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = kPadding),
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 14.sp,
-                maxLines = 1, // Limit to one line
-            )
+        content = {
+            Column(modifier = Modifier.padding(kPadding)) {
+                Box(
+                    modifier = Modifier.clip(MaterialTheme.shapes.medium).weight(1f),
+                    contentAlignment = Alignment.Center,
+                    content = {
+                        SubcomposeAsyncImage(
+                            model = bookImage,
+                            loading = {
+                                Box(
+                                    modifier = Modifier.width(32.dp).height(32.dp).align(Alignment.Center),
+                                    content = {
+                                        CircularProgressIndicator()
+                                    }
+                                )
+                            },
+                            filterQuality = FilterQuality.Low,
+                            clipToBounds = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            contentDescription = null
+                        )
+                    }
+                )
+                Text(
+                    text = bookName,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = kPadding),
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 14.sp,
+                    maxLines = 1, // Limit to one line
+                )
+            }
         }
-    }
+    )
 }
