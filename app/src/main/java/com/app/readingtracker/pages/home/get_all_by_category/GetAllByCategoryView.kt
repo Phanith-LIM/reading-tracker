@@ -1,25 +1,30 @@
 package com.app.readingtracker.pages.home.get_all_by_category
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.pages.home.get_all.GenerateListData
+import com.app.readingtracker.pages.home.book_detail.Shelve
+import com.app.readingtracker.pages.home.get_all.ListTileBook
+import com.app.readingtracker.share.composable.RouteState
+import kotlinx.coroutines.flow.firstOrNull
 
 data class GetAllByCategoryView(val id: String, val name: String): Screen {
     @SuppressLint("StateFlowValueCalledInComposition")
@@ -31,8 +36,20 @@ data class GetAllByCategoryView(val id: String, val name: String): Screen {
         val uiState by viewModel.uiState.collectAsState()
         val listBook by viewModel.listBooks.collectAsState()
 
+        val context = LocalContext.current
+        val selectedShelve = remember { mutableStateOf<Shelve?>(null) }
+        val isAdded by viewModel.uiAddBookState.collectAsState()
+
+
         LaunchedEffect(Unit) {
-            viewModel.getAllBooksByCategory()
+            val token = DataStoreManager.read(context,"refresh").firstOrNull()
+            viewModel.getAllBooksByCategory(token)
+        }
+
+        LaunchedEffect(isAdded) {
+            if (isAdded) {
+                Toast.makeText(context, "Added to ${selectedShelve.value}", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return Scaffold(
@@ -73,7 +90,21 @@ data class GetAllByCategoryView(val id: String, val name: String): Screen {
                         )
                     }
                     UiState.SUCCESS -> {
-                        GenerateListData(listData = listBook, it = it)
+                        LazyColumn(
+                            modifier = Modifier.padding(it),
+                            content = {
+                                items(listBook) {book ->
+                                    ListTileBook(
+                                        book = book,
+                                        routeFrom = RouteState.UPDATE,
+                                        selectBook = selectedShelve,
+                                        onClick = {
+                                            viewModel.onAddToShelve(selectedShelve.value, book.id)
+                                        }
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }

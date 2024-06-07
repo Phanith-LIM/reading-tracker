@@ -2,16 +2,10 @@ package com.app.readingtracker.pages.home.get_all
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,12 +20,14 @@ import coil.compose.SubcomposeAsyncImage
 import com.app.readingtracker.core.blankImage
 import com.app.readingtracker.pages.home.GetAllEnum
 import com.app.readingtracker.pages.home.book_detail.BookDetailView
+import com.app.readingtracker.pages.home.book_detail.Shelve
+import com.app.readingtracker.share.composable.RouteState
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSpace
 
 @Composable
-fun MenuSample() {
+fun MenuSample(selectBook: MutableState<Shelve?>, onClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     Box(
@@ -46,30 +42,27 @@ fun MenuSample() {
                 content = {
                     DropdownMenuItem(
                         text = { Text("Want to Read") },
-                        onClick = { /* Handle edit! */ },
+                        onClick = {
+                            selectBook.value = Shelve.WANT
+                            onClick()
+                        },
                     )
                     DropdownMenuItem(
                         text = { Text("Currently Reading") },
-                        onClick = { /* Handle settings! */ },
+                        onClick = {
+                            selectBook.value = Shelve.CURRENT
+                            onClick()
+                        },
                     )
                     DropdownMenuItem(
                         text = { Text("Read") },
-                        onClick = { /* Handle send feedback! */ },
+                        onClick = {
+                            selectBook.value = Shelve.READ
+                            onClick()
+                        },
                     )
                 }
             )
-        }
-    )
-}
-
-@Composable
-fun GenerateListData(listData: List<TreadingBookModel>, it: PaddingValues) {
-    return LazyColumn(
-        modifier = Modifier.padding(it),
-        content = {
-            items(listData) {book ->
-                ListTileBook(book)
-            }
         }
     )
 }
@@ -87,13 +80,13 @@ fun DynamicText(value: GetAllEnum) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListTileBook(book: TreadingBookModel) {
+fun ListTileBook(book: TreadingBookModel, routeFrom: RouteState,selectBook: MutableState<Shelve?>, onClick: () -> Unit) {
     val navigator = LocalNavigator.currentOrThrow
     return Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(kPadding / 2),
-        onClick = { navigator.push(BookDetailView(id= book.id)) },
+        onClick = { navigator.push(BookDetailView(id= book.id, routeFrom)) },
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f)),
         colors = CardDefaults.cardColors(
@@ -160,7 +153,7 @@ fun ListTileBook(book: TreadingBookModel) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         content = {
                             Text(text = if(book.numPages != null) book.numPages.toString() + " pages" else "NAN")
-                            MenuSample()
+                            MenuSample(selectBook, onClick = onClick)
                         }
                     )
                 },

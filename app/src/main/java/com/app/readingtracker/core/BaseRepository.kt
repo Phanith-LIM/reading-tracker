@@ -2,6 +2,7 @@ package com.app.readingtracker.core
 
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.Method
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.json.responseJson
 import com.github.kittinunf.result.Result
@@ -16,12 +17,19 @@ open class BaseRepository {
         _header = mapOf("Authorization" to "Bearer $token")
     }
 
-    suspend fun get(path: String): String {
+    private suspend fun request(method: Method, path: String, body: Any? = null): String {
         return suspendCancellableCoroutine { continuation ->
-            Fuel.get(baseUrl + path).header(_header).responseJson { _, _, result ->
+            val request = when (method) {
+                Method.GET -> Fuel.get(baseUrl + path)
+                Method.POST -> Fuel.post(baseUrl + path).jsonBody(body.toString())
+                Method.PUT -> Fuel.put(baseUrl + path).jsonBody(body.toString())
+                else -> throw IllegalArgumentException("Unsupported method")
+            }
+
+            request.header(_header).responseJson { _, _, result ->
                 when (result) {
                     is Result.Failure -> {
-                        Log.d("com.app.readingtracker.core.BaseRepository", "Error fetching data: ${result.getException()}")
+                        Log.d("BaseRepository", "Error ${method.name} data: ${result.getException()}")
                         continuation.resume("")
                     }
                     is Result.Success -> {
@@ -33,23 +41,15 @@ open class BaseRepository {
         }
     }
 
+    suspend fun get(path: String): String {
+        return request(Method.GET, path)
+    }
+
     suspend fun post(path: String, body: Any): String {
-        return suspendCancellableCoroutine { continuation ->
-            Fuel.post(baseUrl + path)
-                .header(_header)
-                .jsonBody(body.toString())
-                .responseJson { _, _, result ->
-                    when (result) {
-                        is Result.Failure -> {
-                            Log.d("BaseRepository", "Error posting data: ${result.getException()}")
-                            continuation.resume("")
-                        }
-                        is Result.Success -> {
-                            val data = result.get().content
-                            continuation.resume(data)
-                        }
-                    }
-                }
-        }
+        return request(Method.POST, path, body)
+    }
+
+    suspend fun put(path: String, body: Any): String {
+        return request(Method.PUT, path, body)
     }
 }

@@ -3,9 +3,9 @@ package com.app.readingtracker.pages.home.book_detail
 import kotlinx.serialization.Serializable
 
 enum class Shelve {
-    READING,
-    CURRENTLY_READ,
-    WANT_TO_READ
+    READ,
+    CURRENT,
+    WANT
 }
 
 @Serializable

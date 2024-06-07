@@ -1,16 +1,16 @@
 package com.app.readingtracker.pages.home.get_all
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +22,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.GetAllEnum
+import com.app.readingtracker.pages.home.book_detail.Shelve
+import com.app.readingtracker.share.composable.RouteState
 import kotlinx.coroutines.flow.firstOrNull
 
 data class GetAllView(val typeGet: GetAllEnum): Screen {
@@ -34,11 +36,19 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
         val uiState by viewModel.uiState.collectAsState()
         val listData by viewModel.listBooks.collectAsState()
         val context = LocalContext.current
+        val selectedShelve = remember { mutableStateOf<Shelve?>(null) }
+        val isUpdated by viewModel.uiUpdateBookState.collectAsState()
 
         LaunchedEffect(Unit) {
             val token = DataStoreManager.read(context,"refresh").firstOrNull()
             if(token != null) {
                 viewModel.getAllBooks(token)
+            }
+        }
+
+        LaunchedEffect(isUpdated) {
+            if (isUpdated) {
+                Toast.makeText(context, "Updated to ${selectedShelve.value}", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -80,7 +90,21 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
                         )
                     }
                     UiState.SUCCESS -> {
-                        GenerateListData(listData = listData, it = it)
+                        LazyColumn(
+                            modifier = Modifier.padding(it),
+                            content = {
+                                items(listData) {book ->
+                                    ListTileBook(
+                                        book = book,
+                                        routeFrom = RouteState.UPDATE,
+                                        selectBook = selectedShelve,
+                                        onClick = {
+                                            viewModel.onUpdate(selectedShelve.value, book.id)
+                                        }
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }

@@ -51,9 +51,14 @@ data class BookView(val navigator: Navigator?): Screen {
                     ),
                     title = { Text("Books", textAlign = TextAlign.Center) },
                     actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Filled.Search, contentDescription = null)
-                        }
+                        IconButton(
+                            onClick = {
+
+                            },
+                            content = {
+                                Icon(Icons.Filled.Search, contentDescription = null)
+                            }
+                        )
                     }
                 )
             },

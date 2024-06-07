@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.app.readingtracker.core.BaseRepository
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.GetAllEnum
+import com.app.readingtracker.pages.home.book_detail.Shelve
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+@Suppress("UNCHECKED_CAST")
 class  GetAllViewModelFactory(private val type: GetAllEnum) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return GetAllViewModel(type) as T
@@ -30,10 +33,13 @@ class GetAllViewModel(private val type: GetAllEnum): ViewModel() {
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
+    private val _uiUpdateBookState = MutableStateFlow<Boolean>(false)
+    val uiUpdateBookState: StateFlow<Boolean> = _uiUpdateBookState.asStateFlow()
+
     fun getAllBooks(token: String) {
         viewModelScope.launch {
             _uiState.value = UiState.LOADING
-            var url: String = "books/type/${type.displayName}"
+            var url = "books/type/${type.displayName}"
             if (type != GetAllEnum.LATEST && type != GetAllEnum.TREADING) {
                 url = url.replace(type.displayName, "book-user?type=${type.displayName}")
                 baseRepository.setHeader(token)
@@ -44,6 +50,29 @@ class GetAllViewModel(private val type: GetAllEnum): ViewModel() {
                 _uiState.value = UiState.SUCCESS
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
+                _errorMessage.value = e.message ?: ""
+                Log.d("Error API", e.message ?: "")
+            }
+        }
+    }
+
+    fun onUpdate(value: Shelve?, id: String) {
+        _uiUpdateBookState.value = false
+        viewModelScope.launch {
+            try {
+                val body = mapOf(
+                    "book_id" to id,
+                    "status" to value?.name
+                )
+                val jsonBody = Json.encodeToString(body)
+                Log.d("OnUpdate", jsonBody)
+                val response = baseRepository.put("users/my-books/update-status", jsonBody)
+                if(response != "") {
+                    _uiUpdateBookState.value = true
+                    _listBooks.value = _listBooks.value.filterNot { it.id == id }
+                }
+            } catch (e: Exception) {
+                _uiUpdateBookState.value = false
                 _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }

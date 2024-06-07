@@ -3,14 +3,11 @@ package com.app.readingtracker.pages.chart
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,10 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.pages.book.BookViewModel
-import com.app.readingtracker.pages.home.LatestBookModel
-import com.app.readingtracker.pages.home.book_detail.BookDetailView
-import com.app.readingtracker.share.composable.BookCard
 import com.app.readingtracker.ui.theme.kPadding
 import com.jaikeerthick.composable_graphs.composables.pie.PieChart
 import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
@@ -54,11 +47,6 @@ class ChartView: Screen {
                 viewModel.getChart(token)
             }
         }
-        val pieChartData = listOf(
-            PieData(value = 130F, label = "Want to Read", color = Color(0xFF6200EE)),
-            PieData(value = 260F, label = "Current Reading", color = Color(0xFF26A69A)),
-            PieData(value = 500F, label = "Read", color = Color(0xFFFFC107)),
-        )
         return Scaffold (
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets(0.dp),
@@ -69,9 +57,14 @@ class ChartView: Screen {
                     ),
                     title = { Text("Chart", textAlign = TextAlign.Center) },
                     actions = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(Icons.Filled.Search, contentDescription = null)
-                        }
+                        IconButton(
+                            onClick = {
+
+                            },
+                            content = {
+                                Icon(Icons.Filled.Refresh, contentDescription = null)
+                            }
+                        )
                     }
                 )
             },

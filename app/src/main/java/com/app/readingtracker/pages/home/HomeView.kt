@@ -11,13 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.get_all.GetAllView
+import com.app.readingtracker.share.composable.RouteState
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kSpace
 
@@ -29,7 +29,6 @@ class HomeView(val navigator: Navigator?) : Screen {
         var active by rememberSaveable { mutableStateOf(false) }
         var text by rememberSaveable { mutableStateOf("") }
         val viewModel = viewModel<HomeViewModel>()
-        val context = LocalContext.current
 
         val uiState by viewModel.uiState.collectAsState()
         val categories by viewModel.categories.collectAsState()
@@ -105,7 +104,7 @@ class HomeView(val navigator: Navigator?) : Screen {
                                         )
                                     },
                                     content = {
-                                        ListSearch(list = listResult, navigator = navigator)
+                                        ListSearch(list = listResult, navigator = navigator, RouteState.NEW)
                                     }
                                 )
                                 if(!active) {
@@ -135,7 +134,7 @@ class HomeView(val navigator: Navigator?) : Screen {
                                                 }
                                             )
                                             Spacer(modifier = Modifier.height(8.dp))
-                                            ListGenerateBook(treading, navigator = navigator)
+                                            ListGenerateBook(treading, navigator = navigator, RouteState.NEW)
                                             Spacer(modifier = Modifier.height(kSpace * 3))
 
                                             // Latest
@@ -147,7 +146,7 @@ class HomeView(val navigator: Navigator?) : Screen {
                                                 }
                                             )
                                             Spacer(modifier = Modifier.height(8.dp))
-                                            ListGenerateLatestBook(latest, navigator = navigator)
+                                            ListGenerateLatestBook(latest, navigator = navigator, RouteState.NEW)
                                             Spacer(modifier = Modifier.height(kSpace * 3))
                                         }
                                     )

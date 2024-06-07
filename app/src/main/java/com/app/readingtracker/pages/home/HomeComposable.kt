@@ -23,6 +23,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.app.readingtracker.pages.home.book_detail.BookDetailView
 import com.app.readingtracker.pages.home.get_all_by_category.GetAllByCategoryView
 import com.app.readingtracker.share.composable.BookCard
+import com.app.readingtracker.share.composable.RouteState
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSpace
@@ -75,10 +76,11 @@ fun ListGenerator(list: List<CategoryModel>?, navigator: Navigator?) {
                             .size(24.dp)
                             .clip(CircleShape)
                             .background(kPrimary),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        IconByName(category.icon)
-                    }
+                        contentAlignment = Alignment.Center,
+                        content = {
+                            IconByName(category.icon)
+                        }
+                    )
                 },
                 shape = MaterialTheme.shapes.large,
                 enabled = true,
@@ -91,11 +93,11 @@ fun ListGenerator(list: List<CategoryModel>?, navigator: Navigator?) {
 }
 
 @Composable
-fun ListSearch(list: List<SearchModel>, navigator: Navigator?) {
+fun ListSearch(list: List<SearchModel>, navigator: Navigator?, routeFrom: RouteState) {
     return Column {
         list.forEach { searchModel ->
             Row(
-                modifier = Modifier.padding(kPadding / 2),
+                modifier = Modifier.padding(kPadding / 2).clickable {  navigator?.push(BookDetailView(searchModel.id, routeFrom)) },
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 content = {
@@ -147,14 +149,14 @@ fun IconByName(name: String) {
 
 
 @Composable
-fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
+fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?, routeFrom: RouteState) {
     return LazyRow {
         items(list ?: emptyList()) { book ->
             BookCard(
                 bookName = book.title,
                 bookImage = book.thumbnail ?: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png",
                 onClick = {
-                    navigator?.push(BookDetailView(book.id))
+                    navigator?.push(BookDetailView(book.id, routeFrom))
                 }
             )
         }
@@ -163,14 +165,14 @@ fun ListGenerateBook(list: List<BookModel> ?, navigator: Navigator?) {
 
 
 @Composable
-fun ListGenerateLatestBook(list: List<LatestBookModel> ?,  navigator: Navigator?) {
+fun ListGenerateLatestBook(list: List<LatestBookModel> ?,  navigator: Navigator?, routeFrom: RouteState) {
     return LazyRow {
         items(list ?: emptyList()) { book ->
             BookCard(
                 bookName = book.title,
                 bookImage = book.thumbnail ?: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png",
                 onClick = {
-                    navigator?.push(BookDetailView(book.id))
+                    navigator?.push(BookDetailView(book.id, routeFrom))
                 }
             )
         }
