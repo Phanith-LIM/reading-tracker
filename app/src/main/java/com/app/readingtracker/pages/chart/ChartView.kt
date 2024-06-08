@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +22,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
+import com.app.readingtracker.share.composable.ErrorComposable
+import com.app.readingtracker.share.composable.LoadingComposable
+import com.app.readingtracker.share.composable.NoRecordComposable
 import com.app.readingtracker.ui.theme.kPadding
 import com.jaikeerthick.composable_graphs.composables.pie.PieChart
 import com.jaikeerthick.composable_graphs.composables.pie.model.PieData
@@ -56,56 +57,32 @@ class ChartView: Screen {
                         containerColor = MaterialTheme.colorScheme.background,
                     ),
                     title = { Text("Chart", textAlign = TextAlign.Center) },
-                    actions = {
-                        IconButton(
-                            onClick = {
-
-                            },
-                            content = {
-                                Icon(Icons.Filled.Refresh, contentDescription = null)
-                            }
-                        )
-                    }
                 )
             },
             content = {
                 when(uiState) {
-                    UiState.LOADING -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it),
-                            contentAlignment = Alignment.Center,
-                            content = { CircularProgressIndicator() }
-                        )
-                    }
-                    UiState.ERROR -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(horizontal = 8.dp),
-                            contentAlignment = Alignment.Center,
-                            content = { Text("An error occurred. Please try again. ${viewModel.errorMessage.value}") }
-                        )
-                    }
+                    UiState.LOADING -> { LoadingComposable(it = it) }
+                    UiState.ERROR -> { ErrorComposable(it = it) }
                     UiState.SUCCESS -> {
-                        Column (
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(
-                                    top = kPadding,
-                                    end = kPadding * 2,
-                                    start = kPadding * 2,
-                                )
-                                .verticalScroll(rememberScrollState()),
-                            content = {
-                                Text("Overview", style = MaterialTheme.typography.titleLarge)
-                                Spacer(modifier = Modifier.height(kPadding / 2 ))
-                                ListChart(list = dashboardData)
-                            }
-                        )
+                        if(dashboardData.isEmpty()) { NoRecordComposable(it = it) }
+                        else {
+                            Column (
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(it)
+                                    .padding(
+                                        top = kPadding,
+                                        end = kPadding * 2,
+                                        start = kPadding * 2,
+                                    )
+                                    .verticalScroll(rememberScrollState()),
+                                content = {
+                                    Text("Overview", style = MaterialTheme.typography.titleLarge)
+                                    Spacer(modifier = Modifier.height(kPadding / 2 ))
+                                    ListChart(list = dashboardData)
+                                }
+                            )
+                        }
                     }
                 }
             },
@@ -132,16 +109,22 @@ fun ChartCompose(data: DashboardModel) {
     )
     return Card (
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = Modifier.fillMaxWidth().padding(kPadding),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(kPadding),
         colors = CardDefaults.cardColors( containerColor = MaterialTheme.colorScheme.background),
         content = {
             Column(
-                modifier = Modifier.fillMaxSize().padding(kPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(kPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
                     Text(
                         text = data.year.toString(),
-                        modifier = Modifier.fillMaxWidth().padding(kPadding),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(kPadding),
                         style = MaterialTheme.typography.headlineSmall,
                         textAlign = TextAlign.Start
                     )

@@ -38,9 +38,7 @@ class GetAllByCategoryModel(private val id: String): ViewModel() {
 
 
     fun getAllBooksByCategory(token: String?) {
-        if(token != null) {
-            baseRepository.setHeader(token)
-        }
+        baseRepository.setHeader(token ?: "")
         viewModelScope.launch {
             _uiState.value = UiState.LOADING
             try {
@@ -66,8 +64,9 @@ class GetAllByCategoryModel(private val id: String): ViewModel() {
                 val jsonBody = Json.encodeToString(body)
                 Log.d("onSave", jsonBody)
                 val response = baseRepository.post("users/my-books/add", jsonBody)
-                if(response != "") {
+                if(response.isNotEmpty()) {
                     _uiAddBookState.value = true
+                    Log.d("onSave", response)
                 }
             } catch (e: Exception) {
                 _uiAddBookState.value = false

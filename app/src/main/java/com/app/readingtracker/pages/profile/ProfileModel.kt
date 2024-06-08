@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class ProfileModel (
     val read: Int,
     val books: Int,
-    val name: String,
-    val avatar: String,
+    var name: String,
+    var avatar: String,
+    val email: String,
 )

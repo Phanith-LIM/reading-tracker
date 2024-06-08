@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.*
@@ -14,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -23,6 +21,9 @@ import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.GetAllEnum
 import com.app.readingtracker.pages.home.book_detail.Shelve
+import com.app.readingtracker.share.composable.ErrorComposable
+import com.app.readingtracker.share.composable.LoadingComposable
+import com.app.readingtracker.share.composable.NoRecordComposable
 import com.app.readingtracker.share.composable.RouteState
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -38,20 +39,26 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
         val context = LocalContext.current
         val selectedShelve = remember { mutableStateOf<Shelve?>(null) }
         val isUpdated by viewModel.uiUpdateBookState.collectAsState()
-
+        val isAdded by viewModel.uiAddBookState.collectAsState()
+        var myToken by remember {
+            mutableStateOf("")
+        }
         LaunchedEffect(Unit) {
             val token = DataStoreManager.read(context,"refresh").firstOrNull()
             if(token != null) {
                 viewModel.getAllBooks(token)
+                myToken = token
             }
         }
 
-        LaunchedEffect(isUpdated) {
+        LaunchedEffect(isUpdated, isAdded) {
             if (isUpdated) {
                 Toast.makeText(context, "Updated to ${selectedShelve.value}", Toast.LENGTH_SHORT).show()
             }
+            if (isAdded) {
+                Toast.makeText(context, "Added to ${selectedShelve.value}", Toast.LENGTH_SHORT).show()
+            }
         }
-
         return Scaffold(
             modifier = Modifier.background(Color.White),
             topBar = {
@@ -70,41 +77,31 @@ data class GetAllView(val typeGet: GetAllEnum): Screen {
             },
             content = {
                 when(uiState) {
-                    UiState.LOADING -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it),
-                            contentAlignment = Alignment.Center,
-                            content = { CircularProgressIndicator() }
-                        )
-                    }
-                    UiState.ERROR -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(horizontal = 8.dp),
-                            contentAlignment = Alignment.Center,
-                            content = { Text("An error occurred. Please try again.") }
-                        )
-                    }
+                    UiState.LOADING -> { LoadingComposable(it = it) }
+                    UiState.ERROR -> { ErrorComposable(it = it) }
                     UiState.SUCCESS -> {
-                        LazyColumn(
-                            modifier = Modifier.padding(it),
-                            content = {
-                                items(listData) {book ->
-                                    ListTileBook(
-                                        book = book,
-                                        routeFrom = RouteState.UPDATE,
-                                        selectBook = selectedShelve,
-                                        onClick = {
-                                            viewModel.onUpdate(selectedShelve.value, book.id)
-                                        }
-                                    )
+                        if(listData.isEmpty()) { NoRecordComposable(it = it) }
+                        else {
+                            LazyColumn(
+                                modifier = Modifier.padding(it),
+                                content = {
+                                    items(listData) {book ->
+                                        ListTileBook(
+                                            book = book,
+                                            routeFrom = if(typeGet == GetAllEnum.LATEST || typeGet == GetAllEnum.TREADING) RouteState.NEW else RouteState.UPDATE,
+                                            selectBook = selectedShelve,
+                                            onClick = {
+                                                if(typeGet == GetAllEnum.LATEST || typeGet == GetAllEnum.TREADING) {
+                                                    viewModel.onAddToShelve(selectedShelve.value, book.id)
+                                                } else {
+                                                    viewModel.onUpdate(selectedShelve.value, book.id)
+                                                }
+                                            }
+                                        )
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }

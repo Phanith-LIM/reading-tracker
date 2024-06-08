@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.app.readingtracker.R
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
+import com.app.readingtracker.share.composable.ErrorComposable
+import com.app.readingtracker.share.composable.LoadingComposable
 import com.app.readingtracker.share.composable.RouteState
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
@@ -38,7 +38,6 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val navigator = LocalNavigator.currentOrThrow
         val openDialog = remember { mutableStateOf(false) }
         val selectedShelve = remember { mutableStateOf<Shelve?>(null) }
         val viewModel = viewModel<BookDetailViewModel>(factory = BookDetailViewModelFactory(id))
@@ -67,35 +66,12 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                     title = { Text(text = "Book") },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { navigator.pop() },
-                            content = { Icon(Icons.Default.ArrowBackIosNew, contentDescription = null) }
-                        )
-                    }
                 )
            },
            content = { it ->
                when(uiState) {
-                   UiState.LOADING -> {
-                       Box(
-                           modifier = Modifier
-                               .fillMaxSize()
-                               .padding(it),
-                           contentAlignment = Alignment.Center,
-                           content = { CircularProgressIndicator() }
-                       )
-                   }
-                   UiState.ERROR -> {
-                       Box(
-                           modifier = Modifier
-                               .fillMaxSize()
-                               .padding(it)
-                               .padding(horizontal = 8.dp),
-                           contentAlignment = Alignment.Center,
-                           content = { Text("An error occurred. Please try again. ${errorMessage}") }
-                       )
-                   }
+                   UiState.LOADING -> { LoadingComposable(it = it) }
+                   UiState.ERROR -> { ErrorComposable(it = it) }
                    UiState.SUCCESS -> {
                        Column(
                            modifier = Modifier

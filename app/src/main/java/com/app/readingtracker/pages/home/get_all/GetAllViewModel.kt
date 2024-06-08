@@ -33,17 +33,21 @@ class GetAllViewModel(private val type: GetAllEnum): ViewModel() {
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
-    private val _uiUpdateBookState = MutableStateFlow<Boolean>(false)
+    private val _uiUpdateBookState = MutableStateFlow(false)
     val uiUpdateBookState: StateFlow<Boolean> = _uiUpdateBookState.asStateFlow()
 
+    private val _uiAddBookState = MutableStateFlow(false)
+    val uiAddBookState: StateFlow<Boolean> = _uiAddBookState.asStateFlow()
+
     fun getAllBooks(token: String) {
+        baseRepository.setHeader(token)
         viewModelScope.launch {
             _uiState.value = UiState.LOADING
             var url = "books/type/${type.displayName}"
             if (type != GetAllEnum.LATEST && type != GetAllEnum.TREADING) {
                 url = url.replace(type.displayName, "book-user?type=${type.displayName}")
-                baseRepository.setHeader(token)
             }
+            Log.d("GET TOKEN", token)
             try {
                 val response = baseRepository.get(url)
                 _listBooks.value = Json.decodeFromString(response)
@@ -73,6 +77,29 @@ class GetAllViewModel(private val type: GetAllEnum): ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiUpdateBookState.value = false
+                _errorMessage.value = e.message ?: ""
+                Log.d("Error API", e.message ?: "")
+            }
+        }
+    }
+
+    fun onAddToShelve(value: Shelve?, id: String) {
+        _uiAddBookState.value = false
+        viewModelScope.launch {
+            try {
+                val body = mapOf(
+                    "book_id" to id,
+                    "status" to value?.name
+                )
+                val jsonBody = Json.encodeToString(body)
+                Log.d("onSave", jsonBody)
+                val response = baseRepository.post("users/my-books/add", jsonBody)
+                Log.d("Response", response)
+                if(response != "") {
+                    _uiAddBookState.value = true
+                }
+            } catch (e: Exception) {
+                _uiAddBookState.value = false
                 _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }

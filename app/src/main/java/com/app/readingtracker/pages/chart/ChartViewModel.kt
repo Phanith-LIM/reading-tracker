@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.readingtracker.core.BaseRepository
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.pages.book.BookModelCount
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +34,7 @@ class ChartViewModel: ViewModel() {
                     _dasboardData.value = Json.decodeFromString(response)
                     _uiState.value = UiState.SUCCESS
                 }
+
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
                 _errorMessage.value = e.message ?: ""

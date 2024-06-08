@@ -62,7 +62,7 @@ class PageView: Screen {
                         0 -> Navigator(HomeView(navigator = navigator))
                         1 -> Navigator(BookView(navigator = navigator))
                         2 -> Navigator(ChartView())
-                        3 -> Navigator(ProfileView())
+                        3 -> Navigator(ProfileView(navigator = navigator))
                     }
                 }
             },

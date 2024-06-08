@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,6 +22,8 @@ import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.GetAllEnum
 import com.app.readingtracker.pages.home.get_all.GetAllView
+import com.app.readingtracker.share.composable.ErrorComposable
+import com.app.readingtracker.share.composable.LoadingComposable
 import com.app.readingtracker.ui.theme.kPadding
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -50,39 +51,12 @@ data class BookView(val navigator: Navigator?): Screen {
                         containerColor = MaterialTheme.colorScheme.background,
                     ),
                     title = { Text("Books", textAlign = TextAlign.Center) },
-                    actions = {
-                        IconButton(
-                            onClick = {
-
-                            },
-                            content = {
-                                Icon(Icons.Filled.Search, contentDescription = null)
-                            }
-                        )
-                    }
                 )
             },
             content = { it ->
                 when(uiState) {
-                    UiState.LOADING -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it),
-                            contentAlignment = Alignment.Center,
-                            content = { CircularProgressIndicator() }
-                        )
-                    }
-                    UiState.ERROR -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(horizontal = 8.dp),
-                            contentAlignment = Alignment.Center,
-                            content = { Text("An error occurred. Please try again. ${viewModel.errorMessage}") }
-                        )
-                    }
+                    UiState.LOADING -> { LoadingComposable(it = it) }
+                    UiState.ERROR -> { ErrorComposable(it = it) }
                     UiState.SUCCESS -> {
                         Column (
                             modifier = Modifier.fillMaxSize().padding(it).padding(kPadding * 2).verticalScroll(rememberScrollState()),

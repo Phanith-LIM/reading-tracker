@@ -2,6 +2,7 @@ package com.app.readingtracker.core
 
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.FileDataPart
 import com.github.kittinunf.fuel.core.Method
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.json.responseJson
@@ -25,7 +26,6 @@ open class BaseRepository {
                 Method.PUT -> Fuel.put(baseUrl + path).jsonBody(body.toString())
                 else -> throw IllegalArgumentException("Unsupported method")
             }
-
             request.header(_header).responseJson { _, _, result ->
                 when (result) {
                     is Result.Failure -> {
@@ -52,4 +52,26 @@ open class BaseRepository {
     suspend fun put(path: String, body: Any): String {
         return request(Method.PUT, path, body)
     }
+
+    suspend fun postFormData(path: String, body:  List<Pair<String, Any?>>?, file: FileDataPart? = null): String {
+        return suspendCancellableCoroutine { continuation ->
+            val request = Fuel.upload(path=baseUrl + path, method = Method.PUT, parameters = body)
+            if(file != null) {
+                request.add(file)
+            }
+            request.header(_header).responseJson { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        Log.d("BaseRepository", "Error FormData: ${result.getException()}")
+                        continuation.resume("")
+                    }
+                    is Result.Success -> {
+                        val data = result.get().content
+                        continuation.resume(data)
+                    }
+                }
+            }
+        }
+    }
 }
+

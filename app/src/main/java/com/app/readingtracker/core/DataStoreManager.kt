@@ -23,4 +23,10 @@ object DataStoreManager {
             preferences[preferencesKey]
         }
     }
+
+    suspend fun clearData(context: Context) {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 }

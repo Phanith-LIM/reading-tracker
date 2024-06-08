@@ -26,6 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -69,6 +70,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.0-alpha08")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha08")
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("com.github.mukeshsolanki:MarkdownView-Android:2.0.0")
     implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.3")
 
     // Voyager
@@ -95,5 +97,4 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.2")
     implementation("androidx.datastore:datastore-preferences-core:1.1.1")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-
 }

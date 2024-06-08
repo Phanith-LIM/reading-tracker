@@ -9,7 +9,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -17,6 +16,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.home.get_all.GetAllView
+import com.app.readingtracker.share.composable.ErrorComposable
+import com.app.readingtracker.share.composable.LoadingComposable
 import com.app.readingtracker.share.composable.RouteState
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kSpace
@@ -34,32 +35,14 @@ class HomeView(val navigator: Navigator?) : Screen {
         val categories by viewModel.categories.collectAsState()
         val treading by viewModel.treading.collectAsState()
         val latest by viewModel.latest.collectAsState()
-        val error by viewModel.errorMessage.collectAsState()
         val listResult by viewModel.searchResult.collectAsState()
 
         return Scaffold(
             contentWindowInsets = WindowInsets(0.dp),
             content = { it ->
                 when (uiState){
-                    UiState.LOADING -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it),
-                            contentAlignment = Alignment.Center,
-                            content = { CircularProgressIndicator() }
-                        )
-                    }
-                    UiState.ERROR -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(it)
-                                .padding(horizontal = 8.dp),
-                            contentAlignment = Alignment.Center,
-                            content = { Text("An error occurred. Please try again.") }
-                        )
-                    }
+                    UiState.LOADING -> { LoadingComposable(it = it) }
+                    UiState.ERROR -> { ErrorComposable(it = it) }
                     UiState.SUCCESS -> {
                         Column (
                             content = {
