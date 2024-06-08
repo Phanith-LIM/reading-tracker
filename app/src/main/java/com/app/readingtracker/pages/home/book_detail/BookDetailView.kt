@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.app.readingtracker.R
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
@@ -44,6 +46,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
         val uiState by viewModel.uiState.collectAsState()
         val errorMessage by viewModel.errorMessage.collectAsState()
         val context = LocalContext.current
+        val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
             val token = DataStoreManager.read(context,"refresh").firstOrNull()
@@ -66,6 +69,14 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                 CenterAlignedTopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
                     title = { Text(text = "Book") },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = { navigator.pop() },
+                            content = {
+                                Icon(Icons.Default.ArrowBackIosNew, contentDescription = null)
+                            }
+                        )
+                    }
                 )
            },
            content = { it ->
