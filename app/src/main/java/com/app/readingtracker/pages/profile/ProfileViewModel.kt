@@ -14,15 +14,11 @@ import kotlinx.serialization.json.Json
 class ProfileViewModel : ViewModel() {
     private val baseRepository: BaseRepository = BaseRepository()
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.LOADING)
+    private val _uiState = MutableStateFlow(UiState.LOADING)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _profileData = MutableStateFlow<ProfileModel?>(null)
     val profileData: StateFlow<ProfileModel?> = _profileData.asStateFlow()
-
-
-    private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
     suspend fun getProfile(token: String) {
         Log.d("MyToken", token)
@@ -37,7 +33,6 @@ class ProfileViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
-                _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }
         }

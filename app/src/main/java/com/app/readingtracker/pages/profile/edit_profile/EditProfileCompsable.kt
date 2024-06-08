@@ -77,7 +77,7 @@ fun MyTextField(text: String, onTextChanged: (String) -> Unit) {
     return OutlinedTextField(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(0.10f),
         value = text,
-        onValueChange = { it -> onTextChanged(it) },
+        onValueChange = { onTextChanged(it) },
         label = { Text("Username") },
         maxLines = 1,
         shape = MaterialTheme.shapes.medium,

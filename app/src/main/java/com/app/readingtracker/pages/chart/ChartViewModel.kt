@@ -14,7 +14,7 @@ import kotlinx.serialization.json.Json
 class ChartViewModel: ViewModel() {
     private val baseRepository: BaseRepository = BaseRepository()
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.LOADING)
+    private val _uiState = MutableStateFlow(UiState.LOADING)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _dasboardData = MutableStateFlow<List<DashboardModel>>(emptyList())

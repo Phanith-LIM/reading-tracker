@@ -32,7 +32,7 @@ class PrivacyPolicyView: Screen {
                     }
                 )
             },
-            content = { it ->
+            content = {
                 MarkDown(
                     url = URL(markdownUrl),
                     modifier = Modifier.fillMaxSize().padding(it)

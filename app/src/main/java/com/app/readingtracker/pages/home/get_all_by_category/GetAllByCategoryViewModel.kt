@@ -33,7 +33,7 @@ class GetAllByCategoryModel(private val id: String): ViewModel() {
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
-    private val _uiAddBookState = MutableStateFlow<Boolean>(false)
+    private val _uiAddBookState = MutableStateFlow(false)
     val uiAddBookState: StateFlow<Boolean> = _uiAddBookState.asStateFlow()
 
 

@@ -25,7 +25,8 @@ import com.app.readingtracker.pages.splashscreen.SplashScreen
 import com.app.readingtracker.share.composable.ErrorComposable
 import com.app.readingtracker.share.composable.LoadingComposable
 import com.app.readingtracker.ui.theme.kPadding
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
@@ -94,7 +95,7 @@ data class ProfileView(val navigator: Navigator?): Screen {
                                         ListItem(
                                             modifier = Modifier.fillMaxHeight(0.10f).clickable {
                                                 coroutineScope.launch {
-                                                    FirebaseAuth.getInstance().signOut()
+                                                    Firebase.auth.signOut()
                                                     DataStoreManager.clearData(context)
                                                     navigator?.replaceAll(SplashScreen())
                                                 }

@@ -9,13 +9,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class BookViewModel : ViewModel() {
     private val baseRepository: BaseRepository = BaseRepository()
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.LOADING)
+    private val _uiState = MutableStateFlow(UiState.LOADING)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _bookCount = MutableStateFlow<List<BookModelCount>>(emptyList())

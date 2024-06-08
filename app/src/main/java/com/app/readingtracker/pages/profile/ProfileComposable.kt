@@ -16,16 +16,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSpace
 
-@Preview(showBackground = true)
 @Composable
-fun CircleAvatar(@PreviewParameter(NameProvider::class) name: String? = null, imageUrl: String? = null, email: String? = null) {
+fun CircleAvatar(name: String? = null, imageUrl: String? = null, email: String? = null) {
     if(imageUrl != null) {
         return ListItem(
             modifier = Modifier.fillMaxWidth(),

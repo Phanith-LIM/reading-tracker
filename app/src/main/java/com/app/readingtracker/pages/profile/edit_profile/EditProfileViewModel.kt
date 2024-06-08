@@ -27,9 +27,6 @@ class EditProfileViewModel : ViewModel() {
     val profileData: StateFlow<ProfileModel?> = _profileData.asStateFlow()
 
 
-    private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
-
     suspend fun getProfile(token: String) {
         _uiState.value = UiState.LOADING
         baseRepository.setHeader(token)
@@ -44,7 +41,6 @@ class EditProfileViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
-                _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }
         }
@@ -80,7 +76,6 @@ class EditProfileViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
-                _errorMessage.value = e.message ?: ""
                 Log.d("Error API", e.message ?: "")
             }
         }

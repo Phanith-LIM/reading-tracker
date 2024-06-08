@@ -5,13 +5,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class PageViewModel : ViewModel() {
-    private val _selectedIndex = MutableStateFlow<Int>(0);
-    val selectedIndex: StateFlow<Int> = _selectedIndex.asStateFlow();
+    private val _selectedIndex = MutableStateFlow(0)
+    val selectedIndex: StateFlow<Int> = _selectedIndex.asStateFlow()
 
     fun setSelectedIndex(index: Int) {
         if(index == _selectedIndex.value) {
             return
         }
-        _selectedIndex.value = index;
+        _selectedIndex.value = index
     }
 }

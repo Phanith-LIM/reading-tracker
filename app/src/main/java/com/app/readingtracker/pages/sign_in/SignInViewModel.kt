@@ -9,8 +9,6 @@ import com.app.readingtracker.core.BaseRepository
 import com.app.readingtracker.core.DataStoreManager
 import com.app.readingtracker.core.UiState
 import com.app.readingtracker.pages.PageView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,20 +17,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 
 class SignInViewModel : ViewModel() {
-    private val _userState = MutableStateFlow<FirebaseUser?>(null)
-    val userState: StateFlow<FirebaseUser?> = _userState
     private val baseRepository: BaseRepository = BaseRepository()
 
     private val _uiState = MutableStateFlow<UiState?>(null) // Fixed here
     val uiState: StateFlow<UiState?> = _uiState.asStateFlow()
-
-    init {
-        observeUserChanges()
-    }
-
-    fun setUser(user: FirebaseUser? = null) {
-        _userState.value = user
-    }
 
     fun getToken(context: Context, userId: String, navigator: Navigator? = null) {
         viewModelScope.launch {
@@ -51,14 +39,6 @@ class SignInViewModel : ViewModel() {
             } catch (e: Exception) {
                 _uiState.value = UiState.ERROR
                 Log.d("Error API", e.message ?: "")
-            }
-        }
-    }
-
-    private fun observeUserChanges() {
-        FirebaseAuth.getInstance().addAuthStateListener { firebaseAuth ->
-            viewModelScope.launch {
-                _userState.value = firebaseAuth.currentUser
             }
         }
     }

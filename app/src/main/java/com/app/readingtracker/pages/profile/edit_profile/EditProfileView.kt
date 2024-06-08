@@ -113,7 +113,7 @@ class EditProfileView : Screen {
                                         )
                                         MyTextField(
                                             text = text,
-                                            onTextChanged = { it ->
+                                            onTextChanged = {
                                                 text = it
                                             }
                                         )

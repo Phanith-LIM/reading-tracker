@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Reading Tracker</string>
-    <string name="com_auth0_domain">dev-mp28eqhk4qn228go.jp.auth0.com</string>
-    <string name="com_auth0_scheme">https</string>
-    <string name="com_auth0_client_id">QUG10ejRc9jRtBzq3gQbPviiZgkmExDi</string>
     <string name="default_web_client_id">1006818222317-dafh2fsilibolbm1dmmmbulesjgntjgi.apps.googleusercontent.com</string>
-
+    <string name="com_auth0_client_id">lEYhRf0Nlc5blZtTc6kr6b1O7nJfvtAN</string>
+    <string name="com_auth0_domain">dev-3ism30pyn4hw2bob.jp.auth0.com</string>
 </resources>

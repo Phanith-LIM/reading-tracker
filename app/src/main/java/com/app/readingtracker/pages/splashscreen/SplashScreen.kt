@@ -25,7 +25,7 @@ class SplashScreen: Screen {
         val context = LocalContext.current
 
         LaunchedEffect(viewModel) {
-            delay(500)
+            delay(600)
             val hasToken = viewModel.checkToken(context)
             if (hasToken) {
                 navigator.replaceAll(PageView())
@@ -36,7 +36,7 @@ class SplashScreen: Screen {
 
         Scaffold (
             containerColor = MaterialTheme.colorScheme.background,
-            content = { it ->
+            content = {
                 Box(
                     modifier = Modifier.fillMaxSize().padding(it),
                     contentAlignment = Alignment.Center,
@@ -48,9 +48,7 @@ class SplashScreen: Screen {
                                 Image(
                                     painter = painterResource(id = R.drawable.logo),
                                     contentDescription = "logo app",
-                                    modifier = Modifier
-                                        .width(125.dp)
-                                        .height(125.dp)
+                                    modifier = Modifier.width(125.dp).height(125.dp)
                                 )
                                 Spacer(modifier = Modifier.height(32.dp))
                                 CircularProgressIndicator()

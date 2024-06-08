@@ -56,7 +56,7 @@ class PageView: Screen {
         return Scaffold (
             contentColor = MaterialTheme.colorScheme.background,
             contentWindowInsets = WindowInsets(0.dp),
-            content = { it ->
+            content = {
                 Box(modifier = Modifier.fillMaxSize().padding(it)) {
                     when (viewModel.selectedIndex.collectAsState().value) {
                         0 -> Navigator(HomeView(navigator = navigator))

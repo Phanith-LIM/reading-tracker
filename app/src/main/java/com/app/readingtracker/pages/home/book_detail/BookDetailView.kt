@@ -44,7 +44,6 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
         val selectedShelve = remember { mutableStateOf<Shelve?>(null) }
         val viewModel = viewModel<BookDetailViewModel>(factory = BookDetailViewModelFactory(id))
         val uiState by viewModel.uiState.collectAsState()
-        val errorMessage by viewModel.errorMessage.collectAsState()
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
 
@@ -108,7 +107,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                                            buildAnnotatedString {
                                                append("by")
                                                append(" ")
-                                               withStyle(style = SpanStyle(color = kPrimary, fontWeight = FontWeight.W500,)) {
+                                               withStyle(style = SpanStyle(color = kPrimary, fontWeight = FontWeight.W500)) {
                                                    append(viewModel.dataBooks.value?.authors ?: "NAN")
                                                }
                                            }
@@ -149,7 +148,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                                                            )
                                                            .padding(kSpace),
                                                        headlineContent = { Text("Publication date", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.W400, fontSize = 16.sp)) },
-                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.published_year ?: "NAN"}") },
+                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.publishedYear ?: "NAN"}") },
                                                        leadingContent = {
                                                            Icon(
                                                                imageVector = Icons.Default.DateRange,
@@ -170,7 +169,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                                                            )
                                                            .padding(kSpace),
                                                        headlineContent = { Text("Print Length", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.W400, fontSize = 16.sp)) },
-                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.num_pages ?: "NAN"} pages") },
+                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.numPages ?: "NAN"} pages") },
                                                        leadingContent = {
                                                            Icon(
                                                                imageVector = Icons.Default.Book,
@@ -191,7 +190,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                                                            )
                                                            .padding(kSpace),
                                                        headlineContent = { Text("Rating", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.W400, fontSize = 16.sp)) },
-                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.average_rating ?: "NAN"} (${viewModel.dataBooks.collectAsState().value?.ratings_count ?: "NAN"})") },
+                                                       supportingContent = { Text("${viewModel.dataBooks.collectAsState().value?.averageRating ?: "NAN"} (${viewModel.dataBooks.collectAsState().value?.ratingsCount ?: "NAN"})") },
                                                        leadingContent = {
                                                            Icon(
                                                                imageVector = Icons.Default.Star,
