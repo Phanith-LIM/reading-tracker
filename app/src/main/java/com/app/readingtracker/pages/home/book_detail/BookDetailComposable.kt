@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,8 +20,9 @@ import coil.compose.SubcomposeAsyncImage
 
 @Composable
 fun BookCover(url: String) {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     return Box(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f).background(Color.Red),
+        modifier = Modifier.fillMaxWidth().height((screenHeight * 0.3f).coerceAtMost(screenHeight)).background(Color.Red),
         content = {
             SubcomposeAsyncImage(
                 modifier = Modifier.fillMaxWidth(),

@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -46,6 +48,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
         val uiState by viewModel.uiState.collectAsState()
         val context = LocalContext.current
         val navigator = LocalNavigator.currentOrThrow
+        val scrollState = rememberScrollState()
 
         LaunchedEffect(Unit) {
             val token = DataStoreManager.read(context,"refresh").firstOrNull()
@@ -84,9 +87,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                    UiState.ERROR -> { ErrorComposable(it = it) }
                    UiState.SUCCESS -> {
                        Column(
-                           modifier = Modifier
-                               .fillMaxSize()
-                               .padding(it),
+                           modifier = Modifier.fillMaxSize().padding(it).verticalScroll(scrollState),
                            verticalArrangement = Arrangement.SpaceBetween,
                            content = {
                                Column(

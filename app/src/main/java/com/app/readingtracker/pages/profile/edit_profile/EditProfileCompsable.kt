@@ -17,10 +17,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.app.readingtracker.share.sealed.ImageData
+import com.app.readingtracker.ui.theme.kPadding
 
 @Composable
 fun CircleImageWithIconAndFilePicker(imageData: ImageData, onFilePick: () -> Unit, modifier: Modifier = Modifier, shape: Shape = CircleShape) {
@@ -74,8 +76,8 @@ fun CircleImageWithIconAndFilePicker(imageData: ImageData, onFilePick: () -> Uni
 
 @Composable
 fun MyTextField(text: String, onTextChanged: (String) -> Unit) {
-    return OutlinedTextField(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.10f),
+    OutlinedTextField(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = kPadding, vertical = kPadding).heightIn(min = 56.dp, max = 80.dp),
         value = text,
         onValueChange = { onTextChanged(it) },
         label = { Text("Username") },
@@ -84,3 +86,4 @@ fun MyTextField(text: String, onTextChanged: (String) -> Unit) {
         singleLine = true
     )
 }
+

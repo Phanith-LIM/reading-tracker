@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -116,10 +117,11 @@ fun CircleAvatar(name: String? = null, imageUrl: String? = null, email: String? 
 
 @Composable
 fun UserDataReadingComposable(books: Int, read: Int) {
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.14f),
+            .height((screenHeight * 0.1f).coerceAtMost(screenHeight)),
         verticalAlignment = Alignment.CenterVertically,
         content = {
             Column(

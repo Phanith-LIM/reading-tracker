@@ -63,44 +63,47 @@ data class ProfileView(val navigator: Navigator?): Screen {
                     UiState.ERROR -> { ErrorComposable(it = it) }
                     UiState.SUCCESS -> {
                         Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = kPadding * 2)
-                                .padding(it),
+                            modifier = Modifier.fillMaxSize().padding(horizontal = kPadding * 2).padding(it),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             content = {
                                 CircleAvatar(name = profileData?.name, imageUrl = profileData?.avatar, email = profileData?.email)
                                 UserDataReadingComposable(profileData?.books ?: 0, profileData?.read ?: 0)
-                                Column (
-                                    modifier = Modifier.clip(MaterialTheme.shapes.large).background(Color.Black.copy(0.07f)).padding(kPadding),
+                                Column(
+                                    modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.large).background(Color.Black.copy(alpha = 0.07f)).padding(horizontal = kPadding),
                                     content = {
                                         ListItem(
-                                            modifier = Modifier.fillMaxHeight(0.10f).clickable {
-                                                navigator?.push(EditProfileView())
-                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clickable {
+                                                    navigator?.push(EditProfileView())
+                                                },
                                             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                             headlineContent = { Text(text = "Edit Profile") },
                                             leadingContent = { Icon(Icons.Default.Edit, contentDescription = null) },
                                             trailingContent = { Icon(Icons.AutoMirrored.Default.ArrowForwardIos, contentDescription = null) }
                                         )
                                         ListItem(
-                                            modifier = Modifier.fillMaxHeight(0.10f).clickable {
-                                                navigator?.push(PrivacyPolicyView())
-                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clickable {
+                                                    navigator?.push(PrivacyPolicyView())
+                                                },
                                             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                             headlineContent = { Text(text = "Privacy Policy") },
                                             leadingContent = { Icon(Icons.Default.Policy, contentDescription = null) },
                                             trailingContent = { Icon(Icons.AutoMirrored.Default.ArrowForwardIos, contentDescription = null) }
                                         )
                                         ListItem(
-                                            modifier = Modifier.fillMaxHeight(0.10f).clickable {
-                                                coroutineScope.launch {
-                                                    Firebase.auth.signOut()
-                                                    DataStoreManager.clearData(context)
-                                                    navigator?.replaceAll(SplashScreen())
-                                                }
-                                            },
-                                            colors = ListItemDefaults.colors( containerColor = Color.Transparent),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clickable {
+                                                    coroutineScope.launch {
+                                                        Firebase.auth.signOut()
+                                                        DataStoreManager.clearData(context)
+                                                        navigator?.replaceAll(SplashScreen())
+                                                    }
+                                                },
+                                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                             headlineContent = { Text(text = "Sign Out", color = Color.Red) },
                                             leadingContent = { Icon(Icons.AutoMirrored.Default.Logout, contentDescription = null, tint = Color.Red) },
                                             trailingContent = { Icon(Icons.AutoMirrored.Default.ArrowForwardIos, contentDescription = null) }

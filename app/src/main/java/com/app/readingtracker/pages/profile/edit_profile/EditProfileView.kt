@@ -81,8 +81,6 @@ class EditProfileView : Screen {
                     UiState.ERROR -> { ErrorComposable(it = paddingValues) }
                     UiState.SUCCESS -> {
                         var text by remember { mutableStateOf(profileData?.name ?: "") }
-                        // Remove this line to prevent resetting imageData
-                        // imageData = ImageData.ImageUrl(profileData?.avatar ?: "https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&q=70&fm=webp")
                         Column (
                             modifier = Modifier
                                 .padding(paddingValues)
@@ -119,9 +117,7 @@ class EditProfileView : Screen {
                                         )
                                         Spacer(modifier = Modifier.height(kSpace))
                                         OutlinedTextField(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .fillMaxHeight(0.113f),
+                                            modifier = Modifier.fillMaxWidth().padding(horizontal = kPadding).heightIn(min = 56.dp, max = 80.dp),
                                             value = profileData?.email ?: "NAN",
                                             onValueChange = {  },
                                             label = { Text("Email") },
