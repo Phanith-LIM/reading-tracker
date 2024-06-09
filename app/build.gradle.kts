@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+
 android {
     namespace = "com.app.readingtracker"
     compileSdk = 34
@@ -13,7 +14,7 @@ android {
         applicationId = "com.app.readingtracker"
         minSdk = 28
         targetSdk = 34
-        versionCode = 7
+        versionCode = 8
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -22,11 +23,20 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = "phanithlim"
+            keyPassword = "Ite23062002."
+            storeFile = file("/Users/limphanith/Documents/01.Documents/Keystore/rt-upload.jks")
+            storePassword = "Ite23062002."
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -60,7 +70,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -68,8 +77,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("androidx.compose.material:material-icons-extended-android:1.7.0-alpha08")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.0-alpha08")
+    implementation("androidx.compose.material:material-icons-extended-android:1.7.0-beta02")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0-beta02")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.github.mukeshsolanki:MarkdownView-Android:2.0.0")
     implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.3")
@@ -88,14 +97,19 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel-kotlinx-serialization:$fuelVersion")
     implementation("com.google.code.gson:gson:2.10.1")
 
+    // Google
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+    // Other
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("io.insert-koin:koin-androidx-compose:3.0.1")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.android.gms:play-services-auth:21.1.1")
     implementation("com.auth0.android:jwtdecode:2.0.2")
     implementation("androidx.datastore:datastore-preferences-core:1.1.1")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
 }

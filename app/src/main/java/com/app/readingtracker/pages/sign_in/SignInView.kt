@@ -5,8 +5,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Facebook
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,7 +24,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.app.readingtracker.R
 import com.app.readingtracker.core.UiState
-import com.app.readingtracker.share.helper.isJWTExpired
 import com.app.readingtracker.ui.theme.kPadding
 import com.app.readingtracker.ui.theme.kPrimary
 import com.app.readingtracker.ui.theme.kSecondary
@@ -135,7 +132,7 @@ class SignInView : Screen {
                                     },
                                     onClick = {
                                         val googleIdOption =  GetGoogleIdOption.Builder()
-                                            .setFilterByAuthorizedAccounts(true)
+                                            .setFilterByAuthorizedAccounts(false)
                                             .setServerClientId(webClientId)
                                             .build()
 
@@ -165,37 +162,6 @@ class SignInView : Screen {
                                                 Toast.makeText(context,  e.message.toString(), Toast.LENGTH_SHORT).show()
                                             }
                                         }
-                                    }
-                                )
-                                Spacer(modifier = Modifier.height(kSpace))
-                                TextButton(
-                                    modifier = Modifier
-                                        .fillMaxWidth(0.7f)
-                                        .height(50.dp)
-                                        .padding(horizontal = 16.dp),
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = kPrimary
-                                    ),
-                                    shape = MaterialTheme.shapes.medium,
-                                    content = {
-                                        Icon(
-                                            imageVector = Icons.Filled.Facebook,
-                                            contentDescription = null,
-                                            modifier = Modifier.size(30.dp),
-                                            tint = Color.White
-                                        )
-                                        Spacer(modifier = Modifier.width(kSpace))
-                                        Text(
-                                            text = "Continue with Facebook",
-                                            style = MaterialTheme.typography.labelLarge.copy(
-                                                fontSize = 16.sp
-                                            ),
-                                            color = Color.White
-                                        )
-                                    },
-                                    onClick = {
-                                        val result = isJWTExpired()
-                                        Log.d("Token Life", result.toString())
                                     }
                                 )
                             }

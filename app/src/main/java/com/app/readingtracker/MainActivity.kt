@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import cafe.adriel.voyager.navigator.Navigator
 import com.app.readingtracker.pages.splashscreen.SplashScreen
 import com.app.readingtracker.ui.theme.ReadingtrackerTheme
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
                 android.graphics.Color.TRANSPARENT
             )
         )
+        FirebaseApp.initializeApp(this)
         super.onCreate(savedInstanceState)
         this.applicationContext
         setContent {
