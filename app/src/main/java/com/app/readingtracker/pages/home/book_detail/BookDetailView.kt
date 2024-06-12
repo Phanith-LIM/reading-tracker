@@ -209,7 +209,7 @@ data class BookDetailView(private val id: String, private val routeFrom: RouteSt
                                TextButton(
                                    modifier = Modifier
                                        .fillMaxWidth()
-                                       .fillMaxHeight(0.45f)
+                                       .height(IntrinsicSize.Min)
                                        .padding(kPadding),
                                    shape = MaterialTheme.shapes.medium,
                                    colors = ButtonDefaults.buttonColors(
